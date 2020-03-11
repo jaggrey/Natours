@@ -8,6 +8,7 @@ const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
 const compression = require('compression')
+const cors = require('cors')
 
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -25,6 +26,17 @@ app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 
 // 1) GLOBAL MIDDLEWARES - to modify incoming data or request eg. req.body
+// Implement CORS
+app.use(cors()) // sets Acess-Control-Allow-Origin header to '*'
+
+// Allow a specific url through cors eg. backend-hosted on api.travelwithnatours.com and front-end at travelwithnatours.com
+// app.use(cors({
+//   origin: 'https://travelwithnatours.com'
+// }))
+
+app.options('*', cors())
+// app.options('/api/v1/tours/:id', cors())
+
 // Serving static files
 app.use(express.static(path.join(__dirname, 'public')));
 
